@@ -1,6 +1,6 @@
 # Gravity Alpha Mainnet Multi Sender
 
-### Gravity Multi Sender is an innovative platform that allows the seamless transfer of $G In Gravity Alpha Mainnet Network to multiple addresses simultaneously, all within a single transaction.
+**Gravity Multi Sender is an innovative platform that allows the seamless transfer of $G In Gravity Alpha Mainnet Network to multiple addresses simultaneously, all within a single transaction.**
 
 This groundbreaking feature not only simplifies the process of distributing funds but also enhances efficiency for users who manage multiple wallets or engage in community-based initiatives. With Gravity Multi Sender, participants can save time and reduce transaction fees by executing bulk transfers effortlessly.
 
@@ -10,9 +10,17 @@ As the Gravity Alpha Mainnet Network continues to grow, the Gravity Multi Sender
 
 Join the revolution in digital transactions with Gravity Multi Sender, where sending $G is no longer a chore but a seamless experience engineered for the future of finance.
 
-### This is the Structure of How Our Application Works. 
+
+
+
+
+# This is the Structure of How Our Application Works. 
 
 
 ![Tructur](https://github.com/user-attachments/assets/ca6b97a5-2830-4a26-aaec-550c9f4091bf)
 
-# Website : https://gravitymultisender.xyz
+
+
+
+
+# our website is  : https://gravitymultisender.xyz
