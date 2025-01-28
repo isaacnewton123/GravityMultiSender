@@ -10,4 +10,9 @@ As the Gravity Alpha Mainnet Network continues to grow, the Gravity Multi Sender
 
 Join the revolution in digital transactions with Gravity Multi Sender, where sending $G is no longer a chore but a seamless experience engineered for the future of finance.
 
+### This is the Structure of How Our Application Works. 
+
+
+![Tructur](https://github.com/user-attachments/assets/ca6b97a5-2830-4a26-aaec-550c9f4091bf)
+
 # Website : https://gravitymultisender.xyz
