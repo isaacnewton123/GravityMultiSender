@@ -1,0 +1,268 @@
+/* improved-popup-styles.css - Style popup yang lebih baik */
+
+/* Dialog Overlay */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(2px);
+}
+
+/* Dialog Box */
+.dialog {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
+}
+
+.dialog.open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Dialog Header */
+.dialog-header {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  position: relative;
+}
+
+.dialog.success .dialog-header {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-bottom: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.dialog.error .dialog-header {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-bottom: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.dialog.loading .dialog-header {
+  background-color: rgba(59, 130, 246, 0.1);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+}
+
+:root.dark .dialog.success .dialog-header {
+  background-color: rgba(16, 185, 129, 0.2);
+}
+
+:root.dark .dialog.error .dialog-header {
+  background-color: rgba(239, 68, 68, 0.2);
+}
+
+:root.dark .dialog.loading .dialog-header {
+  background-color: rgba(59, 130, 246, 0.2);
+}
+
+.dialog-icon {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.dialog-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Dialog icon colors */
+.dialog-icon.success {
+  color: var(--success-color);
+}
+
+.dialog-icon.error {
+  color: var(--error-color);
+}
+
+.dialog-icon.loading {
+  color: var(--info-color);
+}
+
+.dialog-icon.loading svg {
+  animation: spinner 1s linear infinite;
+}
+
+@keyframes spinner {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Dialog header text */
+.dialog-header h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  flex-grow: 1;
+  color: var(--text-primary);
+}
+
+/* Close button */
+.close-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  border-radius: 50%;
+  transition: background-color 0.15s ease;
+}
+
+.close-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+:root.dark .close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dialog Content */
+.dialog-content {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: 60vh;
+  color: var(--text-primary);
+}
+
+.dialog-content p {
+  margin: 0 0 12px;
+  white-space: pre-line;
+  line-height: 1.5;
+}
+
+/* Transaction Info */
+.tx-info {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-color);
+}
+
+.tx-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--info-color);
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.tx-link svg {
+  width: 16px;
+  height: 16px;
+  margin-left: 6px;
+}
+
+.tx-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Dialog Footer */
+.dialog-footer {
+  padding: 12px 16px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+:root.dark .dialog-footer {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+/* Dialog Button */
+.dialog-button {
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.dialog.success .dialog-button {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.dialog.error .dialog-button {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.dialog.info .dialog-button,
+.dialog.loading .dialog-button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.dialog-button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Custom Spinner for Loading */
+.loading-spinner {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  border: 3px solid rgba(59, 130, 246, 0.2);
+  border-radius: 50%;
+  border-top-color: var(--info-color);
+  animation: spinner 1s linear infinite;
+  margin-right: 12px;
+}
+
+.loading-text {
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+/* Responsive Styles */
+@media (max-width: 480px) {
+  .dialog {
+    width: 95%;
+  }
+  
+  .dialog-header {
+    padding: 14px;
+  }
+  
+  .dialog-content {
+    padding: 14px;
+  }
+  
+  .dialog-footer {
+    padding: 10px 14px;
+  }
+}

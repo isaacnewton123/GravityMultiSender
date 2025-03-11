@@ -1,0 +1,273 @@
+/* popup-styles.css - Tambahkan file ini ke folder styles */
+
+/* Dialog Overlay */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+/* Dialog Box */
+.dialog {
+  background-color: var(--surface-color);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 450px;
+  max-height: 85vh;
+  overflow: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  opacity: 0;
+  transform: scale(0.9);
+  transition: all 0.3s ease;
+}
+
+.dialog.open {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Dialog Header */
+.dialog-header {
+  display: flex;
+  align-items: center;
+  padding: 20px 20px 15px;
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+}
+
+.dialog-icon {
+  width: 32px;
+  height: 32px;
+  margin-right: 15px;
+  flex-shrink: 0;
+}
+
+.dialog-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Dialog icon colors */
+.dialog-icon.success {
+  color: var(--success-color);
+}
+
+.dialog-icon.error {
+  color: var(--error-color);
+}
+
+.dialog-icon.loading svg {
+  animation: spin 1.5s linear infinite;
+}
+
+.dialog-icon.info {
+  color: var(--info-color);
+}
+
+/* Dialog header text */
+.dialog-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  flex-grow: 1;
+  color: var(--text-primary);
+}
+
+/* Close button */
+.close-button {
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.close-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--text-primary);
+}
+
+:root.dark .close-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dialog Content */
+.dialog-content {
+  padding: 20px;
+  overflow-y: auto;
+  max-height: 60vh;
+  color: var(--text-primary);
+}
+
+.dialog-content p {
+  margin: 0 0 16px;
+  line-height: 1.6;
+  white-space: pre-line; /* Untuk menampilkan baris baru dari newline \n */
+}
+
+/* Transaction Info */
+.tx-info {
+  margin-top: 15px;
+  padding-top: 15px;
+  border-top: 1px dashed var(--border-color);
+}
+
+.tx-link {
+  display: inline-flex;
+  align-items: center;
+  color: var(--info-color);
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.tx-link svg {
+  width: 16px;
+  height: 16px;
+  margin-left: 8px;
+}
+
+.tx-link:hover {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+/* Dialog Footer */
+.dialog-footer {
+  padding: 15px 20px 20px;
+  display: flex;
+  justify-content: flex-end;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Dialog Button */
+.dialog-button {
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dialog.success .dialog-button {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.dialog.error .dialog-button {
+  background-color: var(--error-color);
+  color: white;
+}
+
+.dialog.info .dialog-button,
+.dialog.loading .dialog-button {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.dialog-button:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.dialog-button:active {
+  transform: translateY(1px);
+}
+
+/* Animasi */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Adaptasi untuk mode gelap */
+:root.dark .dialog {
+  background-color: #1f2937;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+:root.dark .dialog-header {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+:root.dark .dialog-footer {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+:root.dark .dialog-content p,
+:root.dark .dialog-header h3 {
+  color: white;
+}
+
+:root.dark .close-button {
+  color: #d1d5db;
+}
+
+:root.dark .tx-info {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dialog Types */
+.dialog.loading .dialog-header {
+  border-bottom-color: var(--info-color);
+}
+
+.dialog.success .dialog-header {
+  border-bottom-color: var(--success-color);
+}
+
+.dialog.error .dialog-header {
+  border-bottom-color: var(--error-color);
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .dialog {
+    width: 95%;
+    max-width: 400px;
+  }
+  
+  .dialog-header {
+    padding: 15px 15px 12px;
+  }
+  
+  .dialog-content {
+    padding: 15px;
+  }
+  
+  .dialog-footer {
+    padding: 12px 15px 15px;
+  }
+  
+  .dialog-icon {
+    width: 28px;
+    height: 28px;
+  }
+  
+  .dialog-header h3 {
+    font-size: 1.1rem;
+  }
+}

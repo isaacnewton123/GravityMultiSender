@@ -1,0 +1,111 @@
+/* src/styles/theme.css */
+:root {
+  /* Default Light Theme */
+  --primary-color: #3d0c91;
+  --primary-hover: #4f0fb6;
+  --secondary-color: #4c54d2;
+  --background-color: #f2f5f9;
+  --surface-color: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --error-color: #ef4444;
+  --success-color: #10b981;
+  --warning-color: #f59e0b;
+  --info-color: #3b82f6;
+  --border-color: #e5e7eb;
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  
+  /* Transitions */
+  --transition-color: color 0.3s ease;
+  --transition-background: background-color 0.3s ease;
+  --transition-border: border-color 0.3s ease;
+  --transition-shadow: box-shadow 0.3s ease;
+  --transition-all: all 0.3s ease;
+}
+
+/* Dark Theme */
+:root.dark {
+  --primary-color: #8b5cf6;
+  --primary-hover: #7c3aed;
+  --secondary-color: #6366f1;
+  --background-color: #111827;
+  --surface-color: #1f2937;
+  --text-primary: #f9fafb;
+  --text-secondary: #d1d5db;
+  --error-color: #f87171;
+  --success-color: #34d399;
+  --warning-color: #fbbf24;
+  --info-color: #60a5fa;
+  --border-color: #374151;
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+/* Apply theme transitions */
+* {
+  transition: var(--transition-color), 
+              var(--transition-background), 
+              var(--transition-border),
+              var(--transition-shadow);
+}
+
+/* Special elements with custom transitions */
+.button, .card, .table-row, .preview-button, .theme-toggle {
+  transition: var(--transition-all);
+}
+
+/* Dark mode specific adjustments */
+:root.dark .card {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+:root.dark .recipients-table {
+  border-color: var(--border-color);
+}
+
+:root.dark .table-header {
+  background-color: #263245;
+}
+
+:root.dark .table-row:hover {
+  background-color: #253241;
+}
+
+:root.dark .success-message {
+  background-color: rgba(52, 211, 153, 0.1);
+}
+
+:root.dark .error-message {
+  background-color: rgba(248, 113, 113, 0.1);
+}
+
+:root.dark .token-info, 
+:root.dark .recipients-summary,
+:root.dark .transaction-summary,
+:root.dark .network-info {
+  background-color: #1d2738;
+}
+
+:root.dark .disclaimer {
+  background-color: rgba(99, 102, 241, 0.1);
+}
+
+:root.dark .page-button {
+  background-color: #2a3647;
+}
+
+:root.dark .page-button:hover:not(:disabled) {
+  background-color: #374151;
+}
+
+:root.dark code {
+  background-color: #1d2432;
+}
+
+:root.dark .theme-toggle {
+  border-color: var(--border-color);
+  color: var(--text-primary);
+}
+
+:root.dark .theme-toggle:hover {
+  background-color: #2a3647;
+}
