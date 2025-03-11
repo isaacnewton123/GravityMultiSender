@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.26
+;
 
 interface IERC20 {
     function transfer(address to, uint256 amount) external returns (bool);
@@ -8,16 +9,38 @@ interface IERC20 {
     function approve(address spender, uint256 amount) external returns (bool);
 }
 
-contract MultiSenderG {
-    address public owner;
+contract GravityMultiSender {
+    address public immutable owner;
+    uint256 public constant TAX_PERCENTAGE = 1; // 1% tax
+    uint256 public constant MAX_BATCH_SIZE = 200; // Limit batch size to prevent gas issues
+    
+    event TokenTransfer(address indexed token, address indexed recipient, uint256 amount, uint256 tax);
+    event NativeTransfer(address indexed recipient, uint256 amount, uint256 tax);
+    event TokenRecovery(address indexed token, uint256 amount);
+    event NativeRecovery(uint256 amount);
+    
+    error InvalidArraySize();
+    error InvalidAddress();
+    error InsufficientBalance();
+    error TransferFailed();
+    error TaxTransferFailed();
+    error NothingToRecover();
+    error LengthMismatch();
+    error NotOwner();
     
     constructor() {
         owner = msg.sender;
     }
 
     modifier onlyOwner() {
-        require(msg.sender == owner, "Not owner");
+        if(msg.sender != owner) revert NotOwner();
         _;
+    }
+
+    // Calculate tax amount with precision handling
+    function calculateTax(uint256 amount) public pure returns (uint256) {
+        // Multiply first to avoid precision loss
+        return (amount * TAX_PERCENTAGE) / 100;
     }
 
     function multiSendToken(
@@ -25,30 +48,99 @@ contract MultiSenderG {
         address[] calldata recipients,
         uint256[] calldata amounts
     ) external {
-        require(recipients.length == amounts.length, "Length mismatch");
-        require(recipients.length > 0, "Empty arrays");
+        if(recipients.length != amounts.length) revert LengthMismatch();
+        if(recipients.length == 0 || recipients.length > MAX_BATCH_SIZE) revert InvalidArraySize();
         
         IERC20 tokenContract = IERC20(token);
+        uint256 batchSize = recipients.length;
         
-        for(uint256 i = 0; i < recipients.length; i++) {
-            require(recipients[i] != address(0), "Invalid address");
-            require(tokenContract.transferFrom(msg.sender, recipients[i], amounts[i]), "Transfer failed");
+        for(uint256 i = 0; i < batchSize;) {
+            if(recipients[i] == address(0)) revert InvalidAddress();
+            
+            uint256 taxAmount = calculateTax(amounts[i]);
+            uint256 transferAmount = amounts[i] - taxAmount;
+            
+            bool success = tokenContract.transferFrom(msg.sender, recipients[i], transferAmount);
+            if(!success) revert TransferFailed();
+            
+            if (taxAmount > 0) {
+                success = tokenContract.transferFrom(msg.sender, owner, taxAmount);
+                if(!success) revert TaxTransferFailed();
+            }
+
+            emit TokenTransfer(token, recipients[i], transferAmount, taxAmount);
+
+            unchecked {
+                ++i;
+            }
         }
     }
 
-    function multiSendNative(address[] calldata recipients, uint256[] calldata amounts) external payable {
-        require(recipients.length == amounts.length, "Length mismatch");
-        require(recipients.length > 0, "Empty arrays");
+    function multiSendNative(
+        address[] calldata recipients, 
+        uint256[] calldata amounts
+    ) external payable {
+        if(recipients.length != amounts.length) revert LengthMismatch();
+        if(recipients.length == 0 || recipients.length > MAX_BATCH_SIZE) revert InvalidArraySize();
         
+        uint256 batchSize = recipients.length;
         uint256 totalAmount;
-        for(uint256 i = 0; i < amounts.length; i++) {
-            totalAmount += amounts[i];
-        }
-        require(msg.value >= totalAmount, "Insufficient native token");
+        uint256 totalTax;
         
-        for(uint256 i = 0; i < recipients.length; i++) {
-            require(recipients[i] != address(0), "Invalid address");
-            payable(recipients[i]).transfer(amounts[i]);
+        // Calculate totals
+        for(uint256 i = 0; i < batchSize;) {
+            uint256 taxAmount = calculateTax(amounts[i]);
+            totalTax += taxAmount;
+            totalAmount += (amounts[i] - taxAmount);
+
+            unchecked {
+                ++i;
+            }
         }
+        
+        if(msg.value < (totalAmount + totalTax)) revert InsufficientBalance();
+        
+        // Process transfers
+        for(uint256 i = 0; i < batchSize;) {
+            if(recipients[i] == address(0)) revert InvalidAddress();
+            
+            uint256 taxAmount = calculateTax(amounts[i]);
+            uint256 transferAmount = amounts[i] - taxAmount;
+            
+            payable(recipients[i]).transfer(transferAmount);
+            
+            emit NativeTransfer(recipients[i], transferAmount, taxAmount);
+
+            unchecked {
+                ++i;
+            }
+        }
+        
+        // Send accumulated tax to owner
+        if (totalTax > 0) {
+            payable(owner).transfer(totalTax);
+        }
+    }
+
+    // Emergency function to recover stuck tokens
+    function recoverTokens(address token) external onlyOwner {
+        IERC20 tokenContract = IERC20(token);
+        uint256 balance = tokenContract.balanceOf(address(this));
+        if(balance == 0) revert NothingToRecover();
+        
+        bool success = tokenContract.transfer(owner, balance);
+        if(!success) revert TransferFailed();
+        
+        emit TokenRecovery(token, balance);
+    }
+
+    // Emergency function to recover stuck ETH
+    function recoverEth() external onlyOwner {
+        uint256 balance = address(this).balance;
+        if(balance == 0) revert NothingToRecover();
+        
+        payable(owner).transfer(balance);
+        
+        emit NativeRecovery(balance);
     }
 }
